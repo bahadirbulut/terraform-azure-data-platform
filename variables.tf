@@ -36,3 +36,9 @@ variable "databricks_sku" {
   description = "Databricks SKU, usually 'standard' or 'premium'"
   default     = "premium"
 }
+
+variable "databricks_host" {
+  type        = string
+  description = "Databricks workspace URL (e.g., https://adb-xxxx.azuredatabricks.net). Leave empty to skip Databricks resources in v1."
+  default     = ""
+}
