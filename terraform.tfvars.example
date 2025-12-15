@@ -1,0 +1,11 @@
+project_name = "mydataplatform"
+environment  = "dev"
+location     = "westeurope"
+
+adls_container_names = ["raw", "processed", "curated"]
+databricks_sku       = "standard"
+
+tags = {
+  CostCenter = "IT"
+  Owner      = "DataTeam"
+}

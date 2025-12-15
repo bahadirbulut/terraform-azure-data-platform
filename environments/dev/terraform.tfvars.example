@@ -1,0 +1,5 @@
+# If you want to override values without editing main.tf
+# project = "nexence"
+# env     = "dev"
+# owner   = "bahadir"
+# location = "westeurope"
