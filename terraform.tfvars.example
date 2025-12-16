@@ -1,11 +1,29 @@
-project_name = "mydataplatform"
-environment  = "dev"
-location     = "westeurope"
+# Example terraform.tfvars configuration
+# Copy this file to terraform.tfvars and customize with your values
 
-adls_container_names = ["raw", "processed", "curated"]
-databricks_sku       = "standard"
+project = "mydataplatform"
+env     = "dev"
+owner   = "DataTeam"
+location = "westeurope"
 
-tags = {
+# ADLS Gen2 container names (medallion architecture)
+adls_container_names = ["bronze", "silver", "gold"]
+
+# Databricks workspace SKU (standard or premium)
+databricks_sku = "premium"
+
+# Optional: Enable Databricks compute resources
+# Leave empty to skip Databricks cluster/job/repo creation (Phase 1 only)
+# After Phase 1, get workspace URL from outputs and uncomment below:
+# databricks_host = "https://adb-1234567890123456.7.azuredatabricks.net"
+# repo_url        = "https://github.com/bahadirbulut/terraform-azure-data-platform"
+# repo_path       = "/Repos/bahadir.bulut@nexence.be/terraform-azure-data-platform"
+
+# Optional: Email notifications for Databricks job failures
+# notification_emails = ["bahadir.bulut@nexence.be", "team@nexence.be"]
+
+# Additional tags
+extra_tags = {
   CostCenter = "IT"
-  Owner      = "DataTeam"
+  Team       = "DataEngineering"
 }

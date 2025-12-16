@@ -1,3 +1,15 @@
+# =============================================================================
+# Terraform Variables - Platform Configuration
+# =============================================================================
+# Author: Bahadir Bulut <bahadir.bulut@nexence.be>
+# Purpose: Define all configurable parameters for the Azure data platform
+#
+# Usage: Set values in terraform.tfvars (copy from terraform.tfvars.example)
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Core Project Variables
+# -----------------------------------------------------------------------------
 variable "project" {
   type        = string
   description = "Short project name, e.g. nexence or demo"
@@ -42,3 +54,22 @@ variable "databricks_host" {
   description = "Databricks workspace URL (e.g., https://adb-xxxx.azuredatabricks.net). Leave empty to skip Databricks resources in v1."
   default     = ""
 }
+
+variable "repo_url" {
+  type        = string
+  description = "Git repo URL for Databricks Repos"
+  default     = ""
+}
+
+variable "repo_path" {
+  type        = string
+  description = "Databricks workspace repo path"
+  default     = ""
+}
+
+variable "notification_emails" {
+  type        = list(string)
+  description = "List of email addresses for Databricks job failure notifications"
+  default     = []
+}
+

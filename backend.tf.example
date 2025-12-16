@@ -1,0 +1,65 @@
+# =============================================================================
+# Remote State Backend Configuration Example
+# =============================================================================
+# Author: Bahadir Bulut <bahadir.bulut@nexence.be>
+# Purpose: Configure Azure Storage as remote backend for Terraform state
+# 
+# This enables:
+# - Team collaboration with shared state
+# - State locking to prevent concurrent modifications
+# - State versioning and backup
+# - Centralized state management across environments
+#
+# =============================================================================
+
+# SETUP INSTRUCTIONS:
+# -------------------
+# 1. Create a storage account for Terraform state:
+#
+#    az group create --name tfstate-rg --location westeurope
+#    
+#    az storage account create \
+#      --name tfstate<unique-id> \
+#      --resource-group tfstate-rg \
+#      --location westeurope \
+#      --sku Standard_LRS \
+#      --encryption-services blob
+#    
+#    az storage container create \
+#      --name tfstate \
+#      --account-name tfstate<unique-id>
+#
+# 2. Copy this file to backend.tf (remove .example extension)
+#
+# 3. Update the values below with your storage account details
+#
+# 4. Initialize backend migration:
+#    terraform init -migrate-state
+#
+# WARNING: 
+# - Do not commit backend.tf with credentials to version control!
+# - Add backend.tf to .gitignore if it contains sensitive data
+# - Use environment variables or Azure CLI authentication for production
+#
+# =============================================================================
+
+# Uncomment and configure the block below:
+
+# terraform {
+#   backend "azurerm" {
+#     # Resource group containing the storage account
+#     resource_group_name  = "tfstate-rg"
+#     
+#     # Storage account name (must be globally unique)
+#     storage_account_name = "tfstate<unique-id>"
+#     
+#     # Container name for state files
+#     container_name       = "tfstate"
+#     
+#     # State file name (use different keys for different environments)
+#     # Examples:
+#     # - data-platform-dev.tfstate
+#     # - data-platform-prod.tfstate
+#     key                  = "data-platform.tfstate"
+#   }
+# }
