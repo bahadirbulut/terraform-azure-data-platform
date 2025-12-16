@@ -3,7 +3,7 @@
 **Author:** Bahadir Bulut  
 **Company:** Nexence CommV  
 **Role:** Senior Data Engineer / Analytics Consultant  
-**Contact:** bahadir.bulut@nexence.be, bulutbbahadir@gmail.com
+**Contact:** bahadir.bulut@nexence.be, bulutbbahadir@gmail.com  
 **Location:** Belgium (EU)
 
 ---
