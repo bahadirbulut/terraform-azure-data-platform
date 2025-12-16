@@ -10,11 +10,11 @@
 
 ## Overview
 
-This repository demonstrates a **production-ready Azure data platform** built entirely with Infrastructure as Code (Terraform). It showcases enterprise-grade patterns for modern data engineering with emphasis on **cost optimization**, **security best practices**, and **operational excellence**.
+This repository demonstrates a **production-style reference implementation** of an Azure data platform built entirely with Infrastructure as Code (Terraform). It showcases enterprise-oriented patterns for modern data engineering with emphasis on **cost optimization**, **security best practices**, and **operational excellence**.
 
 **What this platform provides:**
 - Complete medallion architecture (Bronze → Silver → Gold) for data processing
-- Secure, keyless authentication using Azure Managed Identity
+- Designed for keyless authentication via Managed Identity (RBAC), with examples
 - Centralized secrets management with Azure Key Vault
 - Comprehensive observability and monitoring
 - Automated ETL pipelines with Databricks
@@ -251,6 +251,8 @@ All resources send logs/metrics to Log Analytics:
 | **Key Vault** | AuditEvent | AllMetrics |
 | **Databricks** | workspace, clusters, dbfs, jobs | AllMetrics |
 
+**Note:** Databricks diagnostic categories can vary by workspace; categories are configurable.
+
 **Benefits:**
 - Centralized troubleshooting
 - Security audit trail
@@ -321,7 +323,7 @@ terraform output databricks_workspace_url
 
 # Update terraform.tfvars
 databricks_host = "https://adb-xxxx.azuredatabricks.net"
-repo_url        = "https://github.com/bahadirbulut/terraform-azure-data-platform"
+repo_url        = "https://github.com/bahadirbulut/terraform-azure-data-platform.git"
 repo_path       = "/Repos/bahadir.bulut@nexence.be/terraform-azure-data-platform"
 
 # Re-apply to create compute resources
