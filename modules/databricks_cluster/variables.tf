@@ -1,34 +1,58 @@
+# =============================================================================
+# Databricks Cluster Module - Input Variables
+# =============================================================================
+# Defines configuration parameters for interactive Databricks cluster.
+# =============================================================================
+
 variable "cluster_name" {
   type        = string
-  description = "Databricks cluster name"
+  description = "Display name for the Databricks cluster"
 }
 
 variable "autotermination_minutes" {
   type        = number
-  description = "Minutes of inactivity before auto-termination"
+  description = <<-EOT
+    Minutes of inactivity before the cluster automatically terminates.
+    Cost optimization: cluster shuts down when idle to save money.
+    Default: 20 minutes
+  EOT
   default     = 20
 }
 
 variable "node_type_id" {
   type        = string
-  description = "Databricks node type (e.g., Standard_DS3_v2)"
+  description = <<-EOT
+    Azure VM size for cluster nodes.
+    Examples: Standard_DS3_v2 (dev), Standard_DS4_v2 (production)
+  EOT
   default     = "Standard_DS3_v2"
 }
 
 variable "num_workers" {
   type        = number
-  description = "Number of worker nodes"
+  description = <<-EOT
+    Number of worker nodes in the cluster.
+    0 = single-node cluster, 1+ = multi-node cluster
+  EOT
   default     = 1
 }
 
 variable "spark_version" {
   type        = string
-  description = "Databricks runtime version. If empty, latest LTS will be used."
+  description = <<-EOT
+    Databricks runtime version (e.g., '13.3.x-scala2.12').
+    If empty string, latest LTS version will be automatically selected.
+  EOT
   default     = ""
 }
 
 variable "data_security_mode" {
   type        = string
-  description = "Cluster security mode (e.g., NONE or SINGLE_USER). Keep simple for portfolio."
+  description = <<-EOT
+    Cluster security mode:
+    - NONE: No isolation (simplest, for dev/testing)
+    - SINGLE_USER: Isolated for one user
+    - USER_ISOLATION: Multi-user with isolation (production)
+  EOT
   default     = "NONE"
 }

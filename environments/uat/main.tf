@@ -1,14 +1,13 @@
 # =============================================================================
-# Development Environment Configuration
+# UAT Environment Configuration
 # =============================================================================
-# Purpose: Deploy the Azure data platform in development environment
+# Purpose: Deploy the Azure data platform in UAT/staging environment
 #
-# This file demonstrates environment-specific configuration using the
-# root module as a reusable component. Each environment (dev, staging, prod)
-# can have its own configuration with different settings.
+# This configuration demonstrates UAT-specific settings with higher capacity
+# and additional features compared to dev, but more cost-effective than prod.
 #
 # Usage:
-#   cd environments/dev
+#   cd environments/uat
 #   terraform init
 #   terraform apply
 # =============================================================================
@@ -19,20 +18,20 @@ module "platform" {
 
   # Core configuration
   project  = "nexence"
-  env      = "dev"
+  env      = "uat"
   owner    = "bahadir"
   location = "westeurope"
 
   # Storage configuration
   adls_container_names = ["bronze", "silver", "gold"]
   
-  # Databricks configuration
+  # Databricks configuration - Premium for UAT testing
   databricks_sku = "premium"
 
   # Environment-specific tags
   extra_tags = {
     cost_center = "portfolio"
-    environment = "development"
-    purpose     = "development"
+    environment = "uat"
+    purpose     = "testing"
   }
 }

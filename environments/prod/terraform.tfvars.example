@@ -1,0 +1,36 @@
+# =============================================================================
+# Production Environment - Variable Overrides (Optional)
+# =============================================================================
+# This file is optional. Values are hardcoded in main.tf for simplicity.
+# Copy this to terraform.tfvars if you want to override specific values.
+#
+# IMPORTANT: For production, consider using more secure methods:
+# - Azure Key Vault for sensitive values
+# - Environment variables (TF_VAR_*)
+# - Encrypted variable files
+# =============================================================================
+
+# If you want to override values without editing main.tf, uncomment below:
+
+# project = "nexence"
+# env     = "prod"
+# owner   = "bahadir"
+# location = "westeurope"
+
+# Optional: Override Databricks host after workspace creation
+# databricks_host = "https://adb-xxxx.azuredatabricks.net"
+# repo_url        = "https://github.com/bahadirbulut/terraform-azure-data-platform.git"
+# repo_path       = "/Repos/bahadir.bulut@nexence.be/terraform-azure-data-platform"
+
+# Optional: Email notifications (critical for production)
+# notification_emails = ["bahadir.bulut@nexence.be", "team@nexence.be"]
+
+# =============================================================================
+# Production-Specific Considerations
+# =============================================================================
+# For production, you might want to add:
+# - Longer auto-termination for clusters (or none for critical workloads)
+# - Larger VM sizes (e.g., Standard_DS4_v2 or higher)
+# - More worker nodes for parallel processing
+# - Multiple notification emails for redundancy
+# =============================================================================

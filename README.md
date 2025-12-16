@@ -10,15 +10,16 @@
 
 ## Overview
 
-This repository is to demonstrate a **production style reference implementation** of an Azure data platform built entirely with Infrastructure as Code (using Terraform). It consists of enterprise-oriented patterns for modern data engineering with emphasis on the **cost optimization**, **security best practices**, and **operational excellence**.
+This repository demonstrates a **production-style reference implementation** of an Azure data platform built entirely with Infrastructure as Code (Terraform). It showcases enterprise-oriented patterns for modern data engineering with emphasis on **cost optimization**, **security best practices**, and **operational excellence**.
 
 **What this platform provides:**
 - Complete medallion architecture (Bronze → Silver → Gold) for data processing
-- Designed for keyless authentication via a Managed Identity (RBAC), with some examples
-- Centralized secrets management using Azure Key Vault
+- Designed for keyless authentication via Managed Identity (RBAC), with examples
+- Centralized secrets management with Azure Key Vault
 - Comprehensive observability and monitoring
-- Automated ETL pipelines using Databricks
+- Automated ETL pipelines with Databricks
 - Cost-aware design with auto-terminating compute resources
+- Multi-environment support (dev/uat/prod configurations)
 
 ---
 
@@ -31,9 +32,18 @@ This repository is to demonstrate a **production style reference implementation*
 
 ### Deployment Steps
 
+**Choose Your Deployment Approach:**
+
+**Option A: Simple Deployment (Root Folder)**
+
 **Step 1:** Configure your environment
 ```bash
+# Linux/Mac
 cp terraform.tfvars.example terraform.tfvars
+
+# Windows
+copy terraform.tfvars.example terraform.tfvars
+
 # Edit terraform.tfvars with your settings
 ```
 
@@ -52,6 +62,31 @@ terraform output databricks_workspace_url
 # Update terraform.tfvars with databricks_host
 # Re-run terraform apply
 ```
+
+---
+
+**Option B: Environment-Based Deployment (Production Pattern)**
+
+For managing multiple environments (dev/uat/prod), use the environments folder:
+
+```bash
+# Deploy to development
+cd environments/dev
+terraform init
+terraform apply
+
+# Deploy to UAT
+cd environments/uat
+terraform init
+terraform apply
+
+# Deploy to production
+cd environments/prod
+terraform init
+terraform apply
+```
+
+Each environment maintains isolated state files and can have different configurations.
 
 ---
 
@@ -421,6 +456,7 @@ terraform-azure-data-platform/
 ├── main.tf                    # Main Terraform configuration
 ├── variables.tf               # Input variables
 ├── outputs.tf                 # Output values
+├── locals.tf                  # Local values and computed variables
 ├── versions.tf                # Provider version requirements
 ├── providers.tf               # Provider configurations
 ├── backend.tf.example         # Remote state backend template
@@ -436,6 +472,19 @@ terraform-azure-data-platform/
 │   ├── databricks_secret_scope/
 │   ├── diagnostics/
 │   └── log_analytics/
+├── environments/              # Environment-specific configurations
+│   ├── dev/                   # Development environment
+│   │   ├── main.tf
+│   │   ├── backend.tf
+│   │   └── terraform.tfvars.example
+│   ├── uat/                   # UAT/Staging environment
+│   │   ├── main.tf
+│   │   ├── backend.tf
+│   │   └── terraform.tfvars.example
+│   └── prod/                  # Production environment
+│       ├── main.tf
+│       ├── backend.tf
+│       └── terraform.tfvars.example
 ├── databricks/
 │   └── notebooks/             # ETL notebooks
 │       ├── 01_bronze_ingest.py
@@ -453,14 +502,14 @@ terraform-azure-data-platform/
 After successful deployment, consider:
 
 1. **Security Hardening**
-   - Enable the private endpoints for Key Vault and Storage
+   - Enable private endpoints for Key Vault and Storage
    - Configure VNet injection for Databricks
    - Implement network ACLs
 
 2. **Operational Excellence**
-   - Set up Azure Monitor alerts for the cost thresholds
+   - Set up Azure Monitor alerts for cost thresholds
    - Configure automated backup policies
-   - Implement CI/CD pipelne for Terraform
+   - Implement CI/CD pipeline for Terraform
 
 3. **Data Quality**
    - Add data validation rules in Silver layer

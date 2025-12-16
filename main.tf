@@ -5,15 +5,17 @@
 # Company: Nexence CommV
 # Purpose: Main Terraform configuration orchestrating all platform resources
 #
-# This file provisions a complete Azure data platform including:
-# - Foundation: Resource Group, Log Analytics, Key Vault
-# - Storage: ADLS Gen2 with medallion architecture (bronze/silver/gold)
-# - Compute: Azure Databricks workspace (optional cluster/jobs)
-# - Security: Managed Identity RBAC, Key Vault secrets
-# - Observability: Diagnostic settings for all resources
+# DEPLOYMENT ARCHITECTURE:
+# ========================
+# 1. Foundation Layer     - Resource Group, Log Analytics, Identity Management
+# 2. Storage Layer        - ADLS Gen2 with medallion architecture
+# 3. Secrets Management   - Key Vault with secure secret storage
+# 4. Compute Layer        - Azure Databricks workspace (optional cluster/jobs)
+# 5. Security Layer       - Managed Identity RBAC for keyless authentication
+# 6. Observability Layer  - Diagnostic settings for centralized monitoring
 #
 # Architecture: Modular design with reusable components
-# Cost Model: Pay-per-use with auto-terminating compute
+# Cost Model: Pay-per-use with auto-terminating compute resources
 # =============================================================================
 
 # -----------------------------------------------------------------------------
@@ -35,6 +37,14 @@ locals {
     var.extra_tags  # Allow additional custom tags
   )
 }
+
+# =============================================================================
+# 1. FOUNDATION LAYER
+# =============================================================================
+# Core infrastructure components including resource grouping, centralized 
+# logging, and identity management. These resources form the foundation for 
+# all other platform components.
+# =============================================================================
 
 # -----------------------------------------------------------------------------
 # Resource Group - Container for all platform resources
@@ -58,18 +68,12 @@ module "log" {
   tags                = local.common_tags
 }
 
-# -----------------------------------------------------------------------------
-# Azure Key Vault - Centralized secrets management
-# -----------------------------------------------------------------------------
-# Stores sensitive configuration like storage account names
-# Linked to Databricks via secret scope for secure access
-module "kv" {
-  source              = "./modules/key_vault"
-  name                = substr(replace("${local.name_prefix}-kv", "-", ""), 0, 22)  # Max 24 chars, alphanumeric
-  location            = var.location
-  resource_group_name = module.rg.name
-  tags                = local.common_tags
-}
+# =============================================================================
+# 2. STORAGE LAYER
+# =============================================================================
+# Data Lake Storage (ADLS Gen2) with medallion architecture for structured
+# data processing: Bronze (raw) → Silver (cleansed) → Gold (aggregated)
+# =============================================================================
 
 # -----------------------------------------------------------------------------
 # ADLS Gen2 Storage - Data Lake with medallion architecture
@@ -85,29 +89,24 @@ module "adls" {
   tags                = local.common_tags
 }
 
-# -----------------------------------------------------------------------------
-# Azure Databricks Workspace - Unified analytics platform
-# -----------------------------------------------------------------------------
-# Premium SKU recommended for production (RBAC, audit logs, compliance)
-# Workspace only - no compute costs until cluster provisioned
-module "dbx" {
-  source              = "./modules/databricks"
-  name                = "${local.name_prefix}-dbx"
-  location            = var.location
-  resource_group_name = module.rg.name
-  sku                 = var.databricks_sku
-  tags                = local.common_tags
-}
+# =============================================================================
+# 3. SECRETS MANAGEMENT LAYER
+# =============================================================================
+# Centralized secrets storage and management with Azure Key Vault. Secrets
+# are accessible to Databricks via secret scopes for secure authentication.
+# =============================================================================
 
 # -----------------------------------------------------------------------------
-# Managed Identity RBAC - Secure Databricks to ADLS authentication
+# Azure Key Vault - Centralized secrets management
 # -----------------------------------------------------------------------------
-# Grant Databricks workspace managed identity access to storage
-# Eliminates need for access keys or connection strings
-resource "azurerm_role_assignment" "dbx_to_adls" {
-  scope                = module.adls.id
-  role_definition_name = "Storage Blob Data Contributor"  # Read/write access to blobs
-  principal_id         = module.dbx.managed_identity_principal_id
+# Stores sensitive configuration like storage account names
+# Linked to Databricks via secret scope for secure access
+module "kv" {
+  source              = "./modules/key_vault"
+  name                = substr(replace("${local.name_prefix}-kv", "-", ""), 0, 22)  # Max 24 chars, alphanumeric
+  location            = var.location
+  resource_group_name = module.rg.name
+  tags                = local.common_tags
 }
 
 # -----------------------------------------------------------------------------
@@ -136,6 +135,28 @@ module "dbx_secret_scope" {
   scope_name    = "keyvault"
   key_vault_id  = module.kv.id
   key_vault_uri = module.kv.vault_uri
+}
+
+# =============================================================================
+# 4. COMPUTE LAYER
+# =============================================================================
+# Azure Databricks workspace for unified analytics. Includes optional 
+# interactive clusters for development and automated job clusters for 
+# production ETL pipelines. All compute resources are conditionally created.
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Azure Databricks Workspace - Unified analytics platform
+# -----------------------------------------------------------------------------
+# Premium SKU recommended for production (RBAC, audit logs, compliance)
+# Workspace only - no compute costs until cluster provisioned
+module "dbx" {
+  source              = "./modules/databricks"
+  name                = "${local.name_prefix}-dbx"
+  location            = var.location
+  resource_group_name = module.rg.name
+  sku                 = var.databricks_sku
+  tags                = local.common_tags
 }
 
 # -----------------------------------------------------------------------------
@@ -188,10 +209,29 @@ module "dbx_job_daily_orders" {
 }
 
 # =============================================================================
-# Diagnostic Settings - Observability and Auditing
+# 5. SECURITY LAYER
 # =============================================================================
-# All diagnostic settings send logs and metrics to Log Analytics workspace
-# for centralized monitoring, alerting, and compliance
+# Role-Based Access Control (RBAC) for secure, keyless authentication.
+# Databricks uses its managed identity to access storage without access keys.
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Managed Identity RBAC - Secure Databricks to ADLS authentication
+# -----------------------------------------------------------------------------
+# Grant Databricks workspace managed identity access to storage
+# Eliminates need for access keys or connection strings
+resource "azurerm_role_assignment" "dbx_to_adls" {
+  scope                = module.adls.id
+  role_definition_name = "Storage Blob Data Contributor"  # Read/write access to blobs
+  principal_id         = module.dbx.managed_identity_principal_id
+}
+
+# =============================================================================
+# 6. OBSERVABILITY LAYER
+# =============================================================================
+# Diagnostic settings for centralized logging and monitoring. All resource
+# logs and metrics are sent to Log Analytics for auditing, troubleshooting,
+# and compliance tracking.
 # =============================================================================
 
 # -----------------------------------------------------------------------------
