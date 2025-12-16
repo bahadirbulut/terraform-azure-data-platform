@@ -1,11 +1,165 @@
+# =============================================================================
+# Terraform .gitignore
+# =============================================================================
+# Comprehensive ignore rules for Terraform Azure Data Platform project
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Terraform Core Files
+# -----------------------------------------------------------------------------
+# Local Terraform directory with plugins and modules
 .terraform/
+.terraform.lock.hcl
+
+# State files (contain sensitive resource data)
 *.tfstate
 *.tfstate.*
+*.tfstate.backup
+
+# Plan files (may contain sensitive data)
 *.tfplan
+*.tfplan.*
+
+# Crash log files from Terraform
 crash.log
+crash.*.log
+
+# -----------------------------------------------------------------------------
+# Configuration Files (Sensitive Data)
+# -----------------------------------------------------------------------------
+# Local variable files (may contain secrets, credentials, email addresses)
 terraform.tfvars
+*.auto.tfvars
+*.auto.tfvars.json
+
+# Backend configuration (contains storage account details)
+backend.tf
+
+# Override files (local customizations)
 override.tf
 override.tf.json
 *_override.tf
 *_override.tf.json
-.terraform.lock.hcl
+
+# -----------------------------------------------------------------------------
+# Azure & Provider Files
+# -----------------------------------------------------------------------------
+# Azure credentials cache
+.azure/
+
+# Provider plugin cache
+.terraform.d/
+
+# -----------------------------------------------------------------------------
+# IDE & Editor Files
+# -----------------------------------------------------------------------------
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# JetBrains IDEs (IntelliJ, PyCharm, etc.)
+.idea/
+*.iml
+*.iws
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# -----------------------------------------------------------------------------
+# Operating System Files
+# -----------------------------------------------------------------------------
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+.directory
+
+# -----------------------------------------------------------------------------
+# Backup & Temporary Files
+# -----------------------------------------------------------------------------
+# Backup files
+*.backup
+*.bak
+*.old
+*.orig
+README.md.backup
+
+# Temporary files
+*.tmp
+*.temp
+
+# Log files
+*.log
+
+# -----------------------------------------------------------------------------
+# Python (for Databricks notebooks local development)
+# -----------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ipynb_checkpoints/
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# -----------------------------------------------------------------------------
+# Documentation & Build Artifacts
+# -----------------------------------------------------------------------------
+# Generated documentation
+docs/_build/
+site/
+
+# -----------------------------------------------------------------------------
+# Security & Secrets
+# -----------------------------------------------------------------------------
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Secret files
+secrets/
+*.pem
+*.key
+*.crt
+*.pfx
+
+# Credentials
+credentials.json
+service-account*.json
+
+# -----------------------------------------------------------------------------
+# Project Specific
+# -----------------------------------------------------------------------------
+# Sample data (if it becomes large)
+# sample_data/*.csv
+
+# Test outputs
+test-results/
+coverage/

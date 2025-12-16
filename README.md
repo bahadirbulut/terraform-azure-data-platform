@@ -3,7 +3,7 @@
 **Author:** Bahadir Bulut  
 **Company:** Nexence CommV  
 **Role:** Senior Data Engineer / Analytics Consultant  
-**Contact:** bahadir.bulut@nexence.be
+**Contact:** bahadir.bulut@nexence.be, bulutbbahadir@gmail.com
 **Location:** Belgium (EU)
 
 ---
@@ -19,8 +19,6 @@ This repository demonstrates a **production-ready Azure data platform** built en
 - Comprehensive observability and monitoring
 - Automated ETL pipelines with Databricks
 - Cost-aware design with auto-terminating compute resources
-
-**Target audience:** Data Engineers, Cloud Architects, DevOps Engineers, Technical Recruiters
 
 ---
 
