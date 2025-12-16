@@ -10,14 +10,14 @@
 
 ## Overview
 
-This repository demonstrates a **production-style reference implementation** of an Azure data platform built entirely with Infrastructure as Code (Terraform). It showcases enterprise-oriented patterns for modern data engineering with emphasis on **cost optimization**, **security best practices**, and **operational excellence**.
+This repository is to demonstrate a **production style reference implementation** of an Azure data platform built entirely with Infrastructure as Code (using Terraform). It consists of enterprise-oriented patterns for modern data engineering with emphasis on the **cost optimization**, **security best practices**, and **operational excellence**.
 
 **What this platform provides:**
 - Complete medallion architecture (Bronze → Silver → Gold) for data processing
-- Designed for keyless authentication via Managed Identity (RBAC), with examples
-- Centralized secrets management with Azure Key Vault
+- Designed for keyless authentication via a Managed Identity (RBAC), with some examples
+- Centralized secrets management using Azure Key Vault
 - Comprehensive observability and monitoring
-- Automated ETL pipelines with Databricks
+- Automated ETL pipelines using Databricks
 - Cost-aware design with auto-terminating compute resources
 
 ---
@@ -453,14 +453,14 @@ terraform-azure-data-platform/
 After successful deployment, consider:
 
 1. **Security Hardening**
-   - Enable private endpoints for Key Vault and Storage
+   - Enable the private endpoints for Key Vault and Storage
    - Configure VNet injection for Databricks
    - Implement network ACLs
 
 2. **Operational Excellence**
-   - Set up Azure Monitor alerts for cost thresholds
+   - Set up Azure Monitor alerts for the cost thresholds
    - Configure automated backup policies
-   - Implement CI/CD pipeline for Terraform
+   - Implement CI/CD pipelne for Terraform
 
 3. **Data Quality**
    - Add data validation rules in Silver layer
